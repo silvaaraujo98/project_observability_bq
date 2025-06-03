@@ -22,7 +22,7 @@ def plot_slots_consumed(df):
                 size=20
             ))
     
-    fig.show()
+    return fig
 
 
 

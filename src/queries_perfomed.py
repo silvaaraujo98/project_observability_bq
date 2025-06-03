@@ -30,7 +30,7 @@ def plot_queries_perfomed(df):
     plot_bgcolor='white', # Set the plot background color
     )
   
-  fig.show()
+  return fig
 
 if __name__ == '__main__':
   df = get_specific_columns(df,'ProjectId','Clusterized_Date','Queries')

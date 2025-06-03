@@ -30,7 +30,7 @@ def plot_average_execution_time(df):
     )
   
     
-    fig.show()
+    return fig
 
 
 if __name__ == '__main__':

@@ -37,15 +37,14 @@ def CreateColumnClusterTime(df):
     df['Data Clusterizada'] = df['Date'].apply(CreateClusterTime)
     return df
 
-def run_all_transformation_functions(path):
-    
+def run_all_transformation_functions():
+    path = '"./data/sample_metadata_bigquery.parquet"'
     df = pd.read_parquet(path)
     df_transformed = df.pipe(SetColumnsDate)\
     .pipe(TransformingSlottoMin)\
     .pipe(CreateColumnClusterTime)
     
     return df_transformed
-
 
     
 if __name__ == '__main__':

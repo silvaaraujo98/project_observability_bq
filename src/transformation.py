@@ -24,24 +24,29 @@ def TransformingSlottoMin(df):
     return df
 
 
-def CreateClusterTime(date_time):
-           '''
-    Cria um cluster de tempo de 5 minutos para uma data qualquer.
+def CreateColumnClusterTime(df):
+    def CreateClusterTime(date_time):
+        # Calcula o número de minutos desde o começo da hora
+        minutes = date_time.minute
+        # Calculate the floor division by 5 to get the correct 5-minute interval.
+        # Calcula o piso da divisão por 5 para obter o intervalor correto de 5 minutos
+        minute_cluster = (minutes // 5) * 5
+        # Substitui os minutos e segundos pelo cluster calculado pela divisão com zero segundos
+        clustered_time = date_time.replace(minute=minute_cluster, second=0, microsecond=0)
+        return clustered_time
+    df['Data Clusterizada'] = df['Date'].apply(CreateClusterTime)
+    return df
 
-    Args:
-        date_time(pd.Timestamp) : A data para ser clusterizada
+def run_all_transformation_functions(path):
+    
+    df = pd.read_parquet(path)
+    df_transformed = df.pipe(SetColumnsDate)\
+    .pipe(TransformingSlottoMin)\
+    .pipe(CreateColumnClusterTime)
+    
+    return df_transformed
 
-    Returns:
-        pd.Timestamp: A data arrendoda para baixa com a marca de 5 minutos mais próxima.
-    '''
-    # Calcula o número de minutos desde o começo da hora
-    minutes = date_time.minute
-    # Calculate the floor division by 5 to get the correct 5-minute interval.
-    # Calcula o piso da divisão por 5 para obter o intervalor correto de 5 minutos
-    minute_cluster = (minutes // 5) * 5
-    # Substitui os minutos e segundos pelo cluster calculado pela divisão com zero segundos
-    clustered_time = date_time.replace(minute=minute_cluster, second=0, microsecond=0)
-    return clustered_time
+
     
 if __name__ == '__main__':
-    ReadParquet("./data/sample_metadata_bigquery.parquet")
+    run_all_transformation_functions("./data/sample_metadata_bigquery.parquet")

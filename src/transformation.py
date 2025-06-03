@@ -34,7 +34,7 @@ def CreateColumnClusterTime(df):
         # Substitui os minutos e segundos pelo cluster calculado pela divisão com zero segundos
         clustered_time = date_time.replace(minute=minute_cluster, second=0, microsecond=0)
         return clustered_time
-    df['Data Clusterizada'] = df['Date'].apply(CreateClusterTime)
+    df['Clusterized_Date'] = df['Date'].apply(CreateClusterTime)
     return df
 
 def run_all_transformation_functions():

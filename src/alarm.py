@@ -33,11 +33,31 @@ def get_last_values_bq_metadata(df_bq_metadata):
 def group_queries_executiontime_project(df_last_values_bq_metadata):
 
     df_grouped_executiontime_queries = df_last_values_bq_metadata.groupby("ProjectId").agg({'execution_time_min':'mean'
-                                                                                            ,'Queries':'sum'}).reset_index()
+                                                                                            ,'Queries':'sum','Clusterized_Date':'max'}).reset_index()
     return df_grouped_executiontime_queries
 
-def merge_bqmetadata_threshold():
-    pass
+def merge_bqmetadata_threshold(df_grouped_executiontime_queries,df_threshold):
+    
+    grouped_exeuctiontime_queries_threshold_df = pd.merge(
+        df_grouped_executiontime_queries,
+             df_threshold,
+             left_on='ProjectId',
+             right_on='Project ID',
+             how='inner')
+    
+    
+    return grouped_exeuctiontime_queries_threshold_df
+    
+
+def create_conditional_columns_to_send_email(grouped_exeuctiontime_queries_threshold_df):
+    
+    grouped_exeuctiontime_queries_threshold_df['execution_time_send_email_flag'] = grouped_exeuctiontime_queries_threshold_df['execution_time_min'] > grouped_exeuctiontime_queries_threshold_df['threshold_executiontime']
+    grouped_exeuctiontime_queries_threshold_df['queries_send_email_flag'] = grouped_exeuctiontime_queries_threshold_df['Queries'] > grouped_exeuctiontime_queries_threshold_df['threshold_queries']
+
+    return grouped_exeuctiontime_queries_threshold_df
+
+
+
 
 
 
@@ -87,5 +107,8 @@ def monitor_bq_projects(df_bq_metadata, df_thresholds):
 
 if __name__ == '__main__':
     df_threshold_executiontime, df_threshold_queries = read_threshold()
-    merging_threshold_dataframes(df_threshold_executiontime, df_threshold_queries)
-    #get_last_values_bq_metadata(df_bq_metadata).pipe(group_queries_executiontime_project)
+    df_threshold = merging_threshold_dataframes(df_threshold_executiontime, df_threshold_queries)
+    df_grouped_executiontime_queries = get_last_values_bq_metadata(df_bq_metadata).pipe(group_queries_executiontime_project)
+    grouped_exeuctiontime_queries_threshold_df = merge_bqmetadata_threshold(df_grouped_executiontime_queries,df_threshold)
+    grouped_exeuctiontime_queries_threshold_df = create_conditional_columns_to_send_email(grouped_exeuctiontime_queries_threshold_df)
+

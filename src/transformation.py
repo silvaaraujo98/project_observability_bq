@@ -41,12 +41,16 @@ def CreateColumnClusterTime(df):
     return df
 
 def create_execution_time(df):
+
     df['execution_time_min'] = (((df['JobEndTime'] - df['JobStartTime'])).dt.total_seconds())/60
+
     return df
 
 def run_all_transformation_functions():
+
     path = "./data/sample_metadata_bigquery.parquet"
     df = pd.read_parquet(path)
+
     df_transformed = df.pipe(SetColumnsDate)\
     .pipe(TransformingSlottoMin)\
     .pipe(CreateColumnClusterTime)\

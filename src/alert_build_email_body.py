@@ -5,16 +5,16 @@ def criar_corpo_email_alerta_dinamico(grouped_exeuctiontime_queries_threshold_df
 
     
     
-    nome_projeto = grouped_exeuctiontime_queries_threshold_df['ProjectId'][0]
-    hora_ocorrencia = grouped_exeuctiontime_queries_threshold_df['Clusterized_Date'][0]
-    tempo_excedido_realizado = grouped_exeuctiontime_queries_threshold_df['execution_time_min'][0]
-    queries_realizadas= grouped_exeuctiontime_queries_threshold_df['Queries'][0]
-    queries_threshold = grouped_exeuctiontime_queries_threshold_df['threshold_queries'][0]
-    tempo_excedido_threshold = grouped_exeuctiontime_queries_threshold_df['threshold_executiontime'][0]
+    nome_projeto = grouped_exeuctiontime_queries_threshold_df['ProjectId']
+    hora_ocorrencia = grouped_exeuctiontime_queries_threshold_df['Clusterized_Date']
+    tempo_excedido_realizado = grouped_exeuctiontime_queries_threshold_df['execution_time_min']
+    queries_realizadas= grouped_exeuctiontime_queries_threshold_df['Queries']
+    queries_threshold = grouped_exeuctiontime_queries_threshold_df['threshold_queries']
+    tempo_excedido_threshold = grouped_exeuctiontime_queries_threshold_df['threshold_executiontime']
 
     # Determina quais tipos de alerta ocorreram
-    alerta_tempo = grouped_exeuctiontime_queries_threshold_df['execution_time_send_email_flag'][0]
-    alerta_queries = grouped_exeuctiontime_queries_threshold_df['queries_send_email_flag'][0]
+    alerta_tempo = grouped_exeuctiontime_queries_threshold_df['execution_time_send_email_flag']
+    alerta_queries = grouped_exeuctiontime_queries_threshold_df['queries_send_email_flag']
 
     # Texto introdutório e lista de detalhes
     introducao_alerta = ""

@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go # Para gráficos mais customizados, se precisar
-from data_processing.transformation import *
+from transformation import *
 from visualizations.queries_perfomed import *
 from visualizations.slots_consumed import *
 from visualizations.average_execution_time import *

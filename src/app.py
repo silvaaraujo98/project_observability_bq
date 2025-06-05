@@ -2,10 +2,10 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go # Para gráficos mais customizados, se precisar
-from transformation import *
-from queries_perfomed import *
-from slots_consumed import *
-from average_execution_time import *
+from data_processing.transformation import *
+from visualizations.queries_perfomed import *
+from visualizations.slots_consumed import *
+from visualizations.average_execution_time import *
 
 
 # --- 1. Funções de Exemplo para Geração de Dados e Gráficos ---

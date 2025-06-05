@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import plotly.express as px
-from transformation import run_all_transformation_functions
+from data_processing.transformation import run_all_transformation_functions
 from auxiliary_functions import *
 
 def plot_slots_consumed(df):

@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 import plotly.express as px
-from transformation import run_all_transformation_functions
 from auxiliary_functions import *
+
 
 
 def plot_average_execution_time(df):
@@ -32,10 +32,3 @@ def plot_average_execution_time(df):
     
     return fig
 
-
-if __name__ == '__main__':
-  
-  df = run_all_transformation_functions()
-  df = get_specific_columns(df,'ProjectId','Clusterized_Date','execution_time_min')
-  grouped_df  = group_and_aggregate_data(df,'execution_time_min','Clusterized_Date','ProjectId',aggregation_method='mean')
-  plot_average_execution_time(grouped_df)

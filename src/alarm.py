@@ -7,12 +7,21 @@ def read_threshold():
 
     df_threshold_executiontime = pd.read_csv("./data/Data Services - Levantamento de Thresholds - Tempo Med. Execução.csv")
     df_threshold_queries = pd.read_csv("./data/Data Services - Levantamento de Thresholds - Consultas Realizadas.csv")
+    
+    df_threshold_executiontime['threshold_executiontime'] = df_threshold_executiontime['Threshold'].str.replace("min","").astype(float)
+    df_threshold_queries['threshold_queries'] = df_threshold_queries['Threshold'].astype(float)
+
+    df_threshold_queries.drop('Threshold',axis=1,inplace=True)
+    df_threshold_executiontime.drop('Threshold',axis=1,inplace=True)
 
     return df_threshold_executiontime, df_threshold_queries
 
+
 def merging_threshold_dataframes(df_threshold_executiontime,df_threshold_queries):
 
-    df_threshold = pd.merge(df_threshold_executiontime,df_threshold_queries,on='')
+    df_threshold = pd.merge(df_threshold_executiontime,df_threshold_queries,on='Project ID')
+    
+    return df_threshold
 
 
 def get_last_values_bq_metadata(df_bq_metadata):
@@ -77,5 +86,6 @@ def monitor_bq_projects(df_bq_metadata, df_thresholds):
 
 
 if __name__ == '__main__':
-    read_threshold()
+    df_threshold_executiontime, df_threshold_queries = read_threshold()
+    merging_threshold_dataframes(df_threshold_executiontime, df_threshold_queries)
     #get_last_values_bq_metadata(df_bq_metadata).pipe(group_queries_executiontime_project)

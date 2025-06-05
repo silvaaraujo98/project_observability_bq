@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
 import plotly.express as px
-from data_processing.transformation import run_all_transformation_functions
-from auxiliary_functions import *
+
 
 def plot_slots_consumed(df):
 
@@ -26,9 +25,3 @@ def plot_slots_consumed(df):
 
 
 
-if __name__ == '__main__':
-  
-  df = run_all_transformation_functions()
-  df = get_specific_columns(df,'ProjectId','TotalSlotMin')
-  grouped_df  = group_and_aggregate_data(df,'TotalSlotMin','ProjectId')
-  plot_slots_consumed(grouped_df)

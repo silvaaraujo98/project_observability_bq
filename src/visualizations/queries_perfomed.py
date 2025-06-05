@@ -1,10 +1,8 @@
 import pandas as pd
 import numpy as np
 import plotly.express as px
-from data_processing.transformation import run_all_transformation_functions
 from auxiliary_functions import *
 
-df = run_all_transformation_functions()
 
 def plot_queries_perfomed(df):
   
@@ -32,10 +30,6 @@ def plot_queries_perfomed(df):
   
   return fig
 
-if __name__ == '__main__':
-  df = get_specific_columns(df,'ProjectId','Clusterized_Date','Queries')
-  grouped_df  = group_and_aggregate_data(df,'Queries','ProjectId','Clusterized_Date')
-  plot_queries_perfomed(grouped_df)
 
 
 

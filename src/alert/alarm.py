@@ -111,4 +111,5 @@ if __name__ == '__main__':
     df_grouped_executiontime_queries = get_last_values_bq_metadata(df_bq_metadata).pipe(group_queries_executiontime_project)
     grouped_exeuctiontime_queries_threshold_df = merge_bqmetadata_threshold(df_grouped_executiontime_queries,df_threshold)
     grouped_exeuctiontime_queries_threshold_df = create_conditional_columns_to_send_email(grouped_exeuctiontime_queries_threshold_df)
+    
 

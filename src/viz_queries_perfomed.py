@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import plotly.express as px
-from auxiliary_functions import *
+from aux_functions import *
 
 
 def plot_queries_perfomed(df):

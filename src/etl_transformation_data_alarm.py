@@ -1,4 +1,4 @@
-from transformation import run_all_transformation_functions
+from etl_transformation import run_all_transformation_functions
 import pandas as pd
 
 
@@ -57,24 +57,27 @@ def merge_bqmetadata_threshold(df_threshold):
 
 def create_conditional_columns_to_send_email(grouped_exeuctiontime_queries_threshold_df):
     
-    grouped_exeuctiontime_queries_threshold_df['execution_time_send_email_flag'] = grouped_exeuctiontime_queries_threshold_df['execution_time_min'] > grouped_exeuctiontime_queries_threshold_df['threshold_executiontime']
+    grouped_exeuctiontime_queries_threshold_df['execution_time_send_email_flag'] = grouped_exeuctiontime_queries_threshold_df['threshold_executiontime'] > grouped_exeuctiontime_queries_threshold_df['threshold_executiontime']
     grouped_exeuctiontime_queries_threshold_df['queries_send_email_flag'] = grouped_exeuctiontime_queries_threshold_df['Queries'] > grouped_exeuctiontime_queries_threshold_df['threshold_queries']
 
     return grouped_exeuctiontime_queries_threshold_df
 
 def filter_only_true_thresholdcolumn(df):
 
-    filtered_df = df(df['queries_send_email_flag'] | df['execution_time_send_email_flag'])
+    filtered_df = df[(df['queries_send_email_flag'] | df['execution_time_send_email_flag'])]
 
     return filtered_df
 
 
 def run_all_transformation_data():
-   df = read_threshold()
-   filtered_df = df.pipe(merging_threshold_dataframes).pipe(merge_bqmetadata_threshold).pipe(create_conditional_columns_to_send_email).pipe(filter_only_true_thresholdcolumn)
+   df_threshold_executiontime, df_threshold_queries = read_threshold()
+   df = merging_threshold_dataframes(df_threshold_executiontime,df_threshold_queries)
+   df_merged = merge_bqmetadata_threshold(df)
+   df_conditional = create_conditional_columns_to_send_email(df_merged)
+   filtered_df = filter_only_true_thresholdcolumn(df_conditional)
+
 
    return filtered_df
 
 
-run_all_transformation_data()
 

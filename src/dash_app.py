@@ -25,9 +25,24 @@ Você pode visualizar o tempo médio de execução e o consumo de slots nas últ
 # --- 3. Carregamento e Processamento dos Dados ---
 # Use st.cache_data para evitar recarregar e reprocessar dados a cada interação.
 @st.cache_data
-def get_data_and_process():
-    # Carrega os dados brutos
+def get_data():
     df_raw = run_all_transformation_functions()
+    return df_raw
+
+def apply_filter(df_raw):
+    projects_selected = st.multiselect(
+        'Selecione os Projetos',
+        options = df_raw['ProjectId'].unique(),
+        default = list(df_raw['ProjectId'].unique()))
+    if projects_selected:
+        df_filtered = df_raw[df_raw['ProjectId'].isin(projects_selected)]
+    else:
+        df_filtered = df_raw
+
+    return df_filtered
+@st.cache_data
+def process_data(df_raw):
+    # Carrega os dados brutos
 
     df_queries_performed_specific_columns = get_specific_columns(df_raw,'ProjectId','Clusterized_Date','Queries')
     df_queries_performed_grouped  = group_and_aggregate_data(df_queries_performed_specific_columns,'Queries','ProjectId','Clusterized_Date')
@@ -60,8 +75,8 @@ def get_data_and_process():
         execution_time_btw_24_48,\
         slot_consumed_last_24hours,\
         slot_consumed_btw_24_48
-    
-
+df_raw = get_data()    
+df_filtered = apply_filter(df_raw)
 
 
 
@@ -74,7 +89,7 @@ df_queries_performed_grouped,\
         execution_time_last_24hours,\
         execution_time_btw_24_48,\
         slot_consumed_last_24hours,\
-        slot_consumed_btw_24_48= get_data_and_process()
+        slot_consumed_btw_24_48= process_data(df_filtered)
 col1, col2, col3 = st.columns(3)
 delta_queries_perfomed = round(((queries_perfomed_last_24hours-queries_perfomed_btw_24_48)*100/queries_perfomed_btw_24_48),2)
 delta_execution_time = round(((execution_time_last_24hours-execution_time_btw_24_48)*100/execution_time_btw_24_48),2)

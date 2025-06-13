@@ -22,8 +22,10 @@ def display_filter(max_date):
         final_date = max_date
         initial_date = datetime(max_date.year,max_date.month,max_date.day)
     elif opcao_selecionada == 'Ontem':
-        final_date = datetime(max_date.year,max_date.month,max_date.day-1)
-        initial_date = datetime(max_date.year,max_date.month,max_date.day-1,23,59,59)
+        yesterday = max_date - timedelta(days=1)
+        final_date = datetime(yesterday.year,yesterday.month,yesterday.day,23,59,59)
+        initial_date = datetime(yesterday.year,yesterday.month,yesterday.day)
+
     elif opcao_selecionada == 'Últimos 15 minutos':
         final_date = max_date
         initial_date = max_date - timedelta(minutes=15)
@@ -50,4 +52,3 @@ def display_filter(max_date):
     st.markdown("---")
     return initial_date,final_date
 
-display_filter(datetime.now())

@@ -6,6 +6,7 @@ from etl_transformation import *
 from viz_queries_perfomed import *
 from viz_slots_consumed import *
 from viz_average_execution_time import *
+from dash_timefilter import display_filter
 
 
 # --- 1. Funções de Exemplo para Geração de Dados e Gráficos ---
@@ -75,7 +76,8 @@ def process_data(df_raw):
         execution_time_btw_24_48,\
         slot_consumed_last_24hours,\
         slot_consumed_btw_24_48
-df_raw = get_data()    
+df_raw = get_data()
+display_filter(df_raw['Clusterized_Date'].max())
 df_filtered = apply_filter(df_raw)
 
 

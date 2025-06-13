@@ -7,6 +7,7 @@ from viz_queries_perfomed import *
 from viz_slots_consumed import *
 from viz_average_execution_time import *
 from dash_timefilter import display_filter
+from datetime import timezone
 
 
 # --- 1. Funções de Exemplo para Geração de Dados e Gráficos ---
@@ -30,7 +31,7 @@ def get_data():
     df_raw = run_all_transformation_functions()
     return df_raw
 
-def apply_filter(df_raw):
+def apply_project_filter(df_raw):
     projects_selected = st.multiselect(
         'Selecione os Projetos',
         options = df_raw['ProjectId'].unique(),
@@ -39,8 +40,14 @@ def apply_filter(df_raw):
         df_filtered = df_raw[df_raw['ProjectId'].isin(projects_selected)]
     else:
         df_filtered = df_raw
-
     return df_filtered
+
+def apply_date_filter(initial_date,final_date,df_raw):
+    aware_initial_date = initial_date.replace(tzinfo=timezone.utc)
+    aware_final_date = final_date.replace(tzinfo=timezone.utc)
+    df_filtered = df_raw[(df_raw['Clusterized_Date'] >= aware_initial_date) & (df_raw['Clusterized_Date'] <= aware_final_date)]
+    return df_filtered
+
 @st.cache_data
 def process_data(df_raw):
     # Carrega os dados brutos
@@ -76,9 +83,13 @@ def process_data(df_raw):
         execution_time_btw_24_48,\
         slot_consumed_last_24hours,\
         slot_consumed_btw_24_48
+
 df_raw = get_data()
-display_filter(df_raw['Clusterized_Date'].max())
-df_filtered = apply_filter(df_raw)
+initial_date,final_date = display_filter(df_raw['Clusterized_Date'].max())
+df_filtered_date = apply_date_filter(initial_date,final_date,df_raw)
+
+df_filtered_project = apply_project_filter(df_filtered_date)
+
 
 
 
@@ -91,11 +102,11 @@ df_queries_performed_grouped,\
         execution_time_last_24hours,\
         execution_time_btw_24_48,\
         slot_consumed_last_24hours,\
-        slot_consumed_btw_24_48= process_data(df_filtered)
+        slot_consumed_btw_24_48= process_data(df_filtered_project)
 col1, col2, col3 = st.columns(3)
-delta_queries_perfomed = round(((queries_perfomed_last_24hours-queries_perfomed_btw_24_48)*100/queries_perfomed_btw_24_48),2)
-delta_execution_time = round(((execution_time_last_24hours-execution_time_btw_24_48)*100/execution_time_btw_24_48),2)
-delta_slot_consumed = round(((slot_consumed_last_24hours-slot_consumed_btw_24_48)*100/slot_consumed_btw_24_48),2)
+delta_queries_perfomed = safely_division((queries_perfomed_last_24hours-queries_perfomed_btw_24_48)*100,queries_perfomed_btw_24_48)
+delta_execution_time = safely_division((execution_time_last_24hours-execution_time_btw_24_48)*100,execution_time_btw_24_48)
+delta_slot_consumed = safely_division((slot_consumed_last_24hours-slot_consumed_btw_24_48)*100,slot_consumed_btw_24_48)
 
 with col1:
     st.metric("Queries executadas nas ultimas 24 horas",format_br_number(queries_perfomed_last_24hours),delta = format_br_number(delta_queries_perfomed) + " %")

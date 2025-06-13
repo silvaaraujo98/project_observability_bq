@@ -47,7 +47,6 @@ def display_filter(max_date):
             hora_fim = st.time_input("Hora de Término", value=time(0, 0))
         final_date = datetime.combine(data_fim, hora_fim)
         initial_date = datetime.combine(data_inicio, hora_inicio)
-    st.write(opcao_selecionada,initial_date,final_date)
 
     st.markdown("---")
     return initial_date,final_date

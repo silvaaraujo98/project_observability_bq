@@ -61,3 +61,13 @@ def format_br_number(value):
     return locale.format_string("%.2f", value, grouping=True)
   else:
     raise TypeError("O valor deve ser um número (int ou float).")
+
+
+def safely_division(numerator,denominator):
+  if denominator == 0:
+      resultado = float(0)
+  else:
+      resultado = numerator / denominator # Ou 0, None, etc., dependendo da sua necessidade
+      print(f"Resultado atribuído no except: {resultado}")
+  return resultado
+

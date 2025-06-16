@@ -72,7 +72,7 @@ def shift_dataframe(df):
         .rename(columns={'clusterized_date': 'clusterized_date_24h_ago', 
                          'queries_perfomed': 'queries_perfomed_24h_ago',
                          'execution_time_min': 'execution_time_min_24h_ago',
-                         'total_slot_min': 'total_slot_min'})
+                         'total_slot_min': 'total_slot_min_24h_ago'})
     df_merged = pd.merge(df, df_shifted, on=['clusterized_date_24h_ago','project_id'], how='left')
     return df
 

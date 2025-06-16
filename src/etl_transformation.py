@@ -74,7 +74,7 @@ def shift_dataframe(df):
                          'execution_time_min': 'execution_time_min_24h_ago',
                          'total_slot_min': 'total_slot_min_24h_ago'})
     df_merged = pd.merge(df, df_shifted, on=['clusterized_date_24h_ago','project_id'], how='left')
-    return df
+    return df_merged
 
 
 if __name__ == '__main__':

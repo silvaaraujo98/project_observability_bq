@@ -68,6 +68,5 @@ def safely_division(numerator,denominator):
       resultado = float(0)
   else:
       resultado = numerator / denominator # Ou 0, None, etc., dependendo da sua necessidade
-      print(f"Resultado atribuído no except: {resultado}")
   return resultado
 

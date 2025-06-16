@@ -5,3 +5,4 @@ venv/
 **/_pycache_/
 src/test_py.py
 _pycache_/
+__pycache__/

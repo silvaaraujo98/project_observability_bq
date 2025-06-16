@@ -5,14 +5,14 @@ def ReadParquet(path):
 
     df = pd.read_parquet(path)
     df_copy = df.copy()
+    df_copy.rename(columns={'ProjectId':"project_id","Queries":"queries_perfomed","Date":"date"},inplace=True)
 
     return df_copy
 
 
 def SetColumnsDate(df):
 
-    df['date'] = pd.to_datetime(df['Date'])
-    df.drop('Date',inplace=True)
+    df['date'] = pd.to_datetime(df['date'])
     df['JobStartTime'] = pd.to_datetime(df['JobStartTime'])
     df['JobEndTime'] = pd.to_datetime(df['JobEndTime'])
 
@@ -50,15 +50,32 @@ def create_execution_time(df):
 def run_all_transformation_functions():
 
     path = "./data/sample_metadata_bigquery.parquet"
-    df = pd.read_parquet(path)
+    df = ReadParquet(path)
 
     df_transformed = df.pipe(SetColumnsDate)\
     .pipe(TransformingSlottoMin)\
     .pipe(CreateColumnClusterTime)\
-    .pipe(create_execution_time)
+    .pipe(create_execution_time)\
+    .pipe(grouping_dataframe)\
+    .pipe(shift_dataframe)
     
     return df_transformed
 
-    
+def grouping_dataframe(df):
+    grouped_df = df.groupby(['clusterized_date','project_id']).agg({"queries_perfomed":"sum","execution_time_min":"mean","total_slot_min":"sum"}).reset_index()
+    return grouped_df
+
+
+def shift_dataframe(df):
+    df['clusterized_date_24h_ago'] = df['clusterized_date'] - pd.Timedelta(days=1)
+    df_shifted = df[['clusterized_date','project_id','queries_perfomed','execution_time_min','total_slot_min']]\
+        .rename(columns={'clusterized_date': 'clusterized_date_24h_ago', 
+                         'queries_perfomed': 'queries_perfomed_24h_ago',
+                         'execution_time_min': 'execution_time_min_24h_ago',
+                         'total_slot_min': 'total_slot_min'})
+    df_merged = pd.merge(df, df_shifted, on=['clusterized_date_24h_ago','project_id'], how='left')
+    return df
+
+
 if __name__ == '__main__':
     run_all_transformation_functions()

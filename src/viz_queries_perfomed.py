@@ -7,9 +7,9 @@ from aux_functions import *
 def plot_queries_perfomed(df):
   
   fig = px.line(df,
-    x = 'Clusterized_Date',
-    y='Queries',
-    color = 'ProjectId',
+    x = 'clusterized_date',
+    y='queries_perfomed',
+    color = 'project_id',
     title = 'Consultas Realizadas')
   
   fig.update_layout(

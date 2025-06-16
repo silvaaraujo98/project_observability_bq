@@ -8,9 +8,9 @@ from aux_functions import *
 def plot_average_execution_time(df):
     fig = px.line(
        df,
-       x='Clusterized_Date',
+       x='clusterized_date',
        y='execution_time_min',
-       color = 'ProjectId',
+       color = 'project_id',
        title = 'Tempo Médio de Execução')
     
     fig.update_layout(

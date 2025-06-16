@@ -5,11 +5,11 @@ import plotly.express as px
 
 def plot_slots_consumed(df):
 
-    slots_total=float(df['TotalSlotMin'].sum())
+    slots_total=float(df['total_slot_min'].sum())
     slots_total_formatted = "{:.2f}".format(slots_total).replace(",",".")
     fig = px.pie(
         df,
-        values='TotalSlotMin',
+        values='total_slot_min',
         names ='ProjectId',
         title = 'Slots Consumidos nas Últimas 24 horas',
         hole=.8)

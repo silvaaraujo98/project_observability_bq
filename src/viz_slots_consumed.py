@@ -10,7 +10,7 @@ def plot_slots_consumed(df):
     fig = px.pie(
         df,
         values='total_slot_min',
-        names ='ProjectId',
+        names ='project_id',
         title = 'Slots Consumidos nas Últimas 24 horas',
         hole=.8)
     fig.add_annotation(x=.5, y=.5,

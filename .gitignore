@@ -4,5 +4,3 @@ venv/
 .venv
 **/_pycache_/
 src/test_py.py
-__pycache__/
-*.pyc

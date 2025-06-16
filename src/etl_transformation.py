@@ -11,7 +11,8 @@ def ReadParquet(path):
 
 def SetColumnsDate(df):
 
-    df['Date'] = pd.to_datetime(df['Date'])
+    df['date'] = pd.to_datetime(df['Date'])
+    df.drop('Date',inplace=True)
     df['JobStartTime'] = pd.to_datetime(df['JobStartTime'])
     df['JobEndTime'] = pd.to_datetime(df['JobEndTime'])
 
@@ -19,7 +20,7 @@ def SetColumnsDate(df):
 
 def TransformingSlottoMin(df):
 
-    df['TotalSlotMin'] = df['TotalSlotMs']/60000
+    df['total_slot_min'] = df['TotalSlotMs']/60000
 
     return df
 
@@ -36,7 +37,7 @@ def CreateColumnClusterTime(df):
         clustered_time = date_time.replace(minute=minute_cluster, second=0, microsecond=0)
         return clustered_time
     
-    df['Clusterized_Date'] = df['Date'].apply(CreateClusterTime)
+    df['clusterized_date'] = df['date'].apply(CreateClusterTime)
 
     return df
 

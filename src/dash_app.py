@@ -34,10 +34,10 @@ def get_data():
 def apply_project_filter(df_raw):
     projects_selected = st.multiselect(
         'Selecione os Projetos',
-        options = df_raw['ProjectId'].unique(),
-        default = list(df_raw['ProjectId'].unique()))
+        options = df_raw['project_id'].unique(),
+        default = list(df_raw['project_id'].unique()))
     if projects_selected:
-        df_filtered = df_raw[df_raw['ProjectId'].isin(projects_selected)]
+        df_filtered = df_raw[df_raw['project_id'].isin(projects_selected)]
     else:
         df_filtered = df_raw
     return df_filtered
@@ -45,25 +45,25 @@ def apply_project_filter(df_raw):
 def apply_date_filter(initial_date,final_date,df_raw):
     aware_initial_date = initial_date.replace(tzinfo=timezone.utc)
     aware_final_date = final_date.replace(tzinfo=timezone.utc)
-    df_filtered = df_raw[(df_raw['Clusterized_Date'] >= aware_initial_date) & (df_raw['Clusterized_Date'] <= aware_final_date)]
+    df_filtered = df_raw[(df_raw['clusterized_date'] >= aware_initial_date) & (df_raw['clusterized_date'] <= aware_final_date)]
     return df_filtered
 
 def create_measures(df):
 
-    queries_perfomed = df['queries_perfomed'].sum()
-    execution_time_min = df['execution_time_min'].sum()
-    total_slot_min = df['total_slot_min'].sum()
+    queries_perfomed = float(df['queries_perfomed'].sum())
+    execution_time_min = float(df['execution_time_min'].sum())
+    total_slot_min = float(df['total_slot_min'].sum())
 
-    queries_perfomed_24h_ago = df['queries_perfomed_24h_ago'].sum()
-    execution_time_min_24h_ago = df['execution_time_min_24h_ago'].sum()
-    total_slot_min_24h_ago = df['total_slot_min_24h_ago'].sum()
+    queries_perfomed_24h_ago = float(df['queries_perfomed_24h_ago'].sum())
+    execution_time_min_24h_ago = float(df['execution_time_min_24h_ago'].sum())
+    total_slot_min_24h_ago = float(df['total_slot_min_24h_ago'].sum())
     
     return queries_perfomed,execution_time_min,total_slot_min,queries_perfomed_24h_ago,execution_time_min_24h_ago,total_slot_min_24h_ago
 
 
 
 df_raw = get_data()
-initial_date,final_date = display_filter(df_raw['Clusterized_Date'].max())
+initial_date,final_date = display_filter(df_raw['clusterized_date'].max())
 df_filtered_date = apply_date_filter(initial_date,final_date,df_raw)
 df_filtered_project = apply_project_filter(df_filtered_date)
 
@@ -81,12 +81,12 @@ delta_execution_time = safely_division((execution_time_min-execution_time_min_24
 delta_slot_consumed = safely_division((total_slot_min-total_slot_min_24h_ago)*100,total_slot_min_24h_ago)
 
 with col1:
-    st.metric("Queries executadas nas ultimas 24 horas",format_br_number(queries_perfomed),delta = format_br_number(delta_queries_perfomed) + " %")
+    st.metric("Queries executadas",format_br_number(queries_perfomed),delta = format_br_number(delta_queries_perfomed) + " %")
 
 with col2:
-    st.metric("Soma de Tempo médio de consultas nas ultimas 24 horas",format_br_number(execution_time_min),delta = format_br_number(delta_execution_time) + " %")
+    st.metric("Soma de Tempo médio de consultas",format_br_number(execution_time_min),delta = format_br_number(delta_execution_time) + " %")
 with col3:
-    st.metric("Slots Consumidos nas últimas 24 horas",format_br_number(total_slot_min),delta = format_br_number(delta_slot_consumed) + " %")
+    st.metric("Slots Consumidos",format_br_number(total_slot_min),delta = format_br_number(delta_slot_consumed) + " %")
 col1,col2= st.columns([2,1])
 # --- 4. Exibição dos Gráficos ---
 with col1:
@@ -103,4 +103,4 @@ st.header("📈 Tempo Médio de Execução")
 st.plotly_chart(plot_average_execution_time(df_filtered_project), use_container_width=True)
 
 st.markdown("---")
-st.caption("Desenvolvido para observabilidade BigQuery.")
+st.caption("Desenvolvido para observabilidade BigQuery. João, the Real Badass")

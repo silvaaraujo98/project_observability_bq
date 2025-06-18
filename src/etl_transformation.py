@@ -3,12 +3,6 @@ import numpy as np
 from aux_functions import *
 import time
 
-def ReadParquetDataset(path):
-    df = pd.read_parquet(path)
-    return df
-
-
-
 def ReadBigQueryDataset():
     
     project_id = "data-core-platform"  # Substitua pelo ID do seu projeto
@@ -30,15 +24,25 @@ def ReadBigQueryDataset():
     return df_copy
 
 
+import pandas as pd 
+import numpy as np
+
+def ReadParquet(path):
+
+    df = pd.read_parquet(path)
+    df_copy = df.copy()
+    df_copy.rename(columns={'ProjectId':"project_id","Queries":"queries_perfomed","Date":"date","TotalSlotMs":"total_slot"},inplace=True)
+
+    return df_copy
+
+
 def SetColumnsDate(df):
 
-    df['date'] = pd.to_datetime(df['Date'])
-    df.drop('Date',inplace=True)
+    df['date'] = pd.to_datetime(df['date'])
     df['JobStartTime'] = pd.to_datetime(df['JobStartTime'])
     df['JobEndTime'] = pd.to_datetime(df['JobEndTime'])
 
     return df
-
 
 
 def CreateColumnClusterTime(df):
@@ -63,18 +67,33 @@ def create_execution_time(df):
 
     return df
 
-    
-
 def run_all_transformation_functions():
 
-    #df = ReadBigQueryDataset()
-    df = ReadParquetDataset("data\sample_metadata_bigquery.parquet")
+    path = "./data/sample_metadata_bigquery.parquet"
+    df = ReadParquet(path)
+
     df_transformed = df.pipe(SetColumnsDate)\
     .pipe(CreateColumnClusterTime)\
-    .pipe(create_execution_time)
-
+    .pipe(create_execution_time)\
+    .pipe(grouping_dataframe)\
+    .pipe(shift_dataframe)
     
     return df_transformed
+
+def grouping_dataframe(df):
+    grouped_df = df.groupby(['clusterized_date','project_id']).agg({"queries_perfomed":"sum","execution_time_min":"mean","total_slot":"sum"}).reset_index()
+    return grouped_df
+
+
+def shift_dataframe(df):
+    df['clusterized_date_24h_ago'] = df['clusterized_date'] - pd.Timedelta(days=1)
+    df_shifted = df[['clusterized_date','project_id','queries_perfomed','execution_time_min','total_slot']]\
+        .rename(columns={'clusterized_date': 'clusterized_date_24h_ago', 
+                         'queries_perfomed': 'queries_perfomed_24h_ago',
+                         'execution_time_min': 'execution_time_min_24h_ago',
+                         'total_slot': 'total_slot_24h_ago'})
+    df_merged = pd.merge(df, df_shifted, on=['clusterized_date_24h_ago','project_id'], how='left')
+    return df_merged
 
 
 if __name__ == '__main__':

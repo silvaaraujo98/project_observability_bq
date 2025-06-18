@@ -5,11 +5,11 @@ from aux_functions import format_br_number
 
 def plot_slots_consumed(df):
 
-    slots_total=float(df['total_slot_min'].sum())
+    slots_total=float(df['total_slot'].sum())
     slots_total_formatted = format_br_number(slots_total)
     fig = px.pie(
         df,
-        values='total_slot_min',
+        values='total_slot',
         names ='project_id',
         title = 'Slots Consumidos nas Últimas 24 horas',
         hole=.8)

@@ -52,13 +52,13 @@ def create_measures(df):
 
     queries_perfomed = float(df['queries_perfomed'].sum())
     execution_time_min = float(df['execution_time_min'].sum())
-    total_slot_min = float(df['total_slot_min'].sum())
+    total_slot = float(df['total_slot'].sum())
 
     queries_perfomed_24h_ago = float(df['queries_perfomed_24h_ago'].sum())
     execution_time_min_24h_ago = float(df['execution_time_min_24h_ago'].sum())
-    total_slot_min_24h_ago = float(df['total_slot_min_24h_ago'].sum())
+    total_slot_24h_ago = float(df['total_slot_24h_ago'].sum())
     
-    return queries_perfomed,execution_time_min,total_slot_min,queries_perfomed_24h_ago,execution_time_min_24h_ago,total_slot_min_24h_ago
+    return queries_perfomed,execution_time_min,total_slot,queries_perfomed_24h_ago,execution_time_min_24h_ago,total_slot_24h_ago
 
 
 
@@ -69,16 +69,16 @@ df_filtered_project = apply_project_filter(df_filtered_date)
 
 queries_perfomed,\
 execution_time_min,\
-total_slot_min,\
+total_slot,\
 queries_perfomed_24h_ago,\
 execution_time_min_24h_ago,\
-total_slot_min_24h_ago = create_measures(df_filtered_project)
+total_slot_24h_ago = create_measures(df_filtered_project)
 
 
 col1, col2, col3 = st.columns(3)
 delta_queries_perfomed = safely_division((queries_perfomed-queries_perfomed_24h_ago)*100,queries_perfomed_24h_ago)
 delta_execution_time = safely_division((execution_time_min-execution_time_min_24h_ago)*100,execution_time_min_24h_ago)
-delta_slot_consumed = safely_division((total_slot_min-total_slot_min_24h_ago)*100,total_slot_min_24h_ago)
+delta_slot_consumed = safely_division((total_slot-total_slot_24h_ago)*100,total_slot_24h_ago)
 
 with col1:
     st.metric("Queries executadas",format_br_number(queries_perfomed),delta = format_br_number(delta_queries_perfomed) + " %")
@@ -86,7 +86,7 @@ with col1:
 with col2:
     st.metric("Soma de Tempo médio de consultas",format_br_number(execution_time_min),delta = format_br_number(delta_execution_time) + " %")
 with col3:
-    st.metric("Slots Consumidos",format_br_number(total_slot_min),delta = format_br_number(delta_slot_consumed) + " %")
+    st.metric("Slots Consumidos",format_br_number(total_slot),delta = format_br_number(delta_slot_consumed) + " %")
 col1,col2= st.columns([2,1])
 # --- 4. Exibição dos Gráficos ---
 with col1:

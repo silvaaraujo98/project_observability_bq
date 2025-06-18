@@ -5,3 +5,5 @@ venv/
 **/_pycache_/
 src/test_py.py
 /__pycache__/
+notebooks/
+src/__pycache__/

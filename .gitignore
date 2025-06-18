@@ -7,3 +7,4 @@ src/test_py.py
 /__pycache__/
 notebooks/
 src/__pycache__/
+__pycache__/

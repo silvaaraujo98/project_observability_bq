@@ -8,3 +8,4 @@ src/test_py.py
 notebooks/
 src/__pycache__/
 __pycache__/
+.vscode/

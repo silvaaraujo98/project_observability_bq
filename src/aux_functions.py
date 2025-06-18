@@ -1,4 +1,25 @@
 import datetime
+import pandas_gbq
+
+
+def extract(project_id: str, query: str):
+    """
+    Extrai dados do BigQuery usando uma consulta SQL e retorna um DataFrame.
+
+    Args:
+        project_id (str): ID do projeto do Google Cloud.
+        query (str): Consulta SQL a ser executada.
+    Returns:
+        pd.DataFrame: DataFrame com os resultados da consulta.
+    """
+    # Usa a biblioteca pandas-gbq para ler os resultados da consulta diretamente em um DataFrame
+    df = pandas_gbq.read_gbq(
+        query,
+        project_id=project_id,
+        dialect="standard"  # Especifica o dialeto SQL padrão do BigQuery
+    )
+    return df
+
 def get_specific_columns(df,*columns_to_select):
 
   return df[list(columns_to_select)]
@@ -69,4 +90,3 @@ def safely_division(numerator,denominator):
   else:
       resultado = numerator / denominator # Ou 0, None, etc., dependendo da sua necessidade
   return resultado
-

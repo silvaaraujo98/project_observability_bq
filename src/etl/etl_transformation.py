@@ -19,7 +19,7 @@ def ReadBigQueryDataset():
     print(f"Tempo decorrido para a query: {elapsed_time:.2f} segundos")
     
     df_copy = df.copy()
-    df_copy.to_parquet("./data/sample_metadata_bigquery.parquet")
+    df_copy.to_parquet("../data/sample_metadata_bigquery.parquet")
 
     return df_copy
 
@@ -69,7 +69,7 @@ def create_execution_time(df):
 
 def run_all_transformation_functions():
 
-    path = "./data/sample_metadata_bigquery.parquet"
+    path = "../data/sample_metadata_bigquery.parquet"
     df = ReadParquet(path)
 
     df_transformed = df.pipe(SetColumnsDate)\

@@ -1,14 +1,12 @@
 
-
-
 def criar_corpo_email_alerta_dinamico(grouped_exeuctiontime_queries_threshold_df):
 
     
     
-    nome_projeto = grouped_exeuctiontime_queries_threshold_df['ProjectId']
-    hora_ocorrencia = grouped_exeuctiontime_queries_threshold_df['Clusterized_Date']
+    nome_projeto = grouped_exeuctiontime_queries_threshold_df['project_id']
+    hora_ocorrencia = grouped_exeuctiontime_queries_threshold_df['clusterized_date']
     tempo_excedido_realizado = grouped_exeuctiontime_queries_threshold_df['execution_time_min']
-    queries_realizadas= grouped_exeuctiontime_queries_threshold_df['Queries']
+    queries_realizadas= grouped_exeuctiontime_queries_threshold_df['queries_perfomed']
     queries_threshold = grouped_exeuctiontime_queries_threshold_df['threshold_queries']
     tempo_excedido_threshold = grouped_exeuctiontime_queries_threshold_df['threshold_executiontime']
 

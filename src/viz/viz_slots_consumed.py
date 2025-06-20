@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import plotly.express as px
-from aux_functions import format_br_number
+from utils.aux_functions import format_br_number
 
 def plot_slots_consumed(df):
 

@@ -2,8 +2,8 @@ import smtplib
 import ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from alert_build_email_body import criar_corpo_email_alerta_dinamico
-from alert_create_credential import get_credential
+from alert.alert_build_email_body import criar_corpo_email_alerta_dinamico
+from alert.alert_create_credential import get_credential
 import pandas as pd
 
 

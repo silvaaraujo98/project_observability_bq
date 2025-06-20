@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import plotly.express as px
-from aux_functions import *
+from utils.aux_functions import *
 
 
 

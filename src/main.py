@@ -2,11 +2,11 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go # Para gráficos mais customizados, se precisar
-from etl_transformation import *
-from viz_queries_perfomed import *
-from viz_slots_consumed import *
-from viz_average_execution_time import *
-from dash_timefilter import display_filter
+from etl.etl_transformation import *
+from viz.viz_queries_perfomed import *
+from viz.viz_slots_consumed import *
+from viz.viz_average_execution_time import *
+from dash.dash_timefilter import display_filter
 from datetime import timezone
 
 

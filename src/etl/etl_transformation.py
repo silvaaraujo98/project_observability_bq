@@ -1,6 +1,6 @@
 import pandas as pd 
 import numpy as np
-from aux_functions import *
+from utils.aux_functions import *
 import time
 
 def ReadBigQueryDataset():
